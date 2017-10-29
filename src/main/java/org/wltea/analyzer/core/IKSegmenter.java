@@ -124,7 +124,14 @@ public final class IKSegmenter {
 				}
 			}
 			//对分词进行歧义处理
-			this.arbitrator.process(context, configuration.isUseSmart());
+			this.arbitrator.process(context, true,1);
+			context.outputToResult();
+
+			//对分词进行歧义处理
+			if (!configuration.isUseSmart()){
+				this.arbitrator.process(context, configuration.isUseSmart(),2);
+				context.outputToResult();
+			}
 			//将分词结果输出到结果集，并处理未切分的单个CJK字符
 			context.outputToResult();
 			//记录本次分词的缓冲区位移

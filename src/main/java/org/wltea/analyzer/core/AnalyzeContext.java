@@ -68,7 +68,10 @@ class AnalyzeContext {
     private Set<String> buffLocker;
     
     //原始分词结果集合，未经歧义处理
-    private QuickSortSet orgLexemes;    
+    private QuickSortSet orgLexemes;
+
+	//原始分词结果集合，未经歧义处理，使用ik分词器时使用，orgLexemes的备份。
+	public QuickSortSet reusableLexemes;
     //LexemePath位置索引表
     private Map<Integer , LexemePath> pathMap;    
     //最终分词结果集
@@ -82,6 +85,7 @@ class AnalyzeContext {
     	this.charTypes = new int[BUFF_SIZE];
     	this.buffLocker = new HashSet<String>();
     	this.orgLexemes = new QuickSortSet();
+		this.reusableLexemes = new QuickSortSet();
     	this.pathMap = new HashMap<Integer , LexemePath>();    	
     	this.results = new LinkedList<Lexeme>();
     }
@@ -242,8 +246,11 @@ class AnalyzeContext {
 	 * 返回原始分词结果
 	 * @return
 	 */
-	QuickSortSet getOrgLexemes(){
-		return this.orgLexemes;
+	QuickSortSet getOrgLexemes(int step){
+		if (step == 1 ){
+			return this.orgLexemes;
+		}else
+			return this.reusableLexemes;
 	}
 	
 	/**

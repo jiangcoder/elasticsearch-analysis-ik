@@ -41,12 +41,14 @@ class IKArbitrator {
 //	 * @param orgLexemes
 	 * @param useSmart
 	 */
-	void process(AnalyzeContext context , boolean useSmart){
-		QuickSortSet orgLexemes = context.getOrgLexemes();
+	void process(AnalyzeContext context , boolean useSmart, int step){
+		QuickSortSet orgLexemes = context.getOrgLexemes(step);
 		Lexeme orgLexeme = orgLexemes.pollFirst();
 		
 		LexemePath crossPath = new LexemePath();
 		while(orgLexeme != null){
+			if (step == 1)
+				context.reusableLexemes.addLexeme(orgLexeme);
 			if(!crossPath.addCrossLexeme(orgLexeme)){
 				//找到与crossPath不相交的下一个crossPath	
 				if(crossPath.size() == 1 || !useSmart){
